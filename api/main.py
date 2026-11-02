@@ -1,7 +1,6 @@
 
 from datetime import date
 import os
-
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Query
@@ -269,6 +268,25 @@ def return_loan(loan_id: str):
 
     except Exception as error:
         raise_api_error(error)
+
+
+# --------------------------------------------------
+# GET ALL MEMBERS
+# --------------------------------------------------
+
+@app.get("/members")
+def get_members():
+
+    return [
+        {
+            "member_id": member.member_id,
+            "name": member.name,
+            "membership_type": type(member).__name__,
+            "max_items": member.max_items,
+            "unpaid_fines": member.unpaid_fines,
+        }
+        for member in library.members.values()
+    ]
 
 
 # --------------------------------------------------

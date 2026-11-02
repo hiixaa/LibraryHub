@@ -1,42 +1,30 @@
 
-import { useEffect, useState } from 'react'
+import { useMember } from '../context/MemberContext'
 
 function MyLoans() {
-    const [loans, setLoans] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState('')
+    const {
+        members,
+        memberId,
+        setMemberId,
+        member,
+        loadingMembers,
+        loadingMember
+    } = useMember()
 
-    const memberId = 'M002'
-
-    useEffect(() => {
-        async function fetchLoans() {
-            try {
-                const response = await fetch(
-                    `${import.meta.env.VITE_API_URL}/members/${memberId}/loans`
-                )
-
-                if (!response.ok) {
-                    throw new Error('Unable to load your loans.')
-                }
-
-                const data = await response.json()
-                setLoans(data)
-            } catch (err) {
-                setError(err.message)
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        fetchLoans()
-    }, [])
-
-    if (loading) {
-        return <main className="catalogue"><p>Loading your loans...</p></main>
+    if (loadingMembers) {
+        return (
+            <main className="catalogue">
+                <p>Loading members...</p>
+            </main>
+        )
     }
 
-    if (error) {
-        return <main className="catalogue"><p>{error}</p></main>
+    if (members.length === 0) {
+        return (
+            <main className="catalogue">
+                <p>Unable to load library members.</p>
+            </main>
+        )
     }
 
     return (
@@ -47,39 +35,93 @@ function MyLoans() {
                 <div className="header-divider"></div>
             </header>
 
+            {/* MEMBER SELECTION */}
             <section className="member-summary">
-                <h2>{loans.member}</h2>
+                <label htmlFor="member-select">
+                    Select Member
+                </label>
 
-                <div className="member-info">
-                    <p><strong>Membership:</strong> {loans.membership_type}</p>
-                    <p><strong>Maximum items:</strong> {loans.max_items}</p>
-                    <p><strong>Unpaid fines:</strong> ₹{loans.unpaid_fines}</p>
-                </div>
-            </section>
+                <select
+                    id="member-select"
+                    value={memberId}
+                    onChange={(e) => setMemberId(e.target.value)}
+                >
+                    {members.map((item) => (
+                        <option
+                            key={item.member_id}
+                            value={item.member_id}
+                        >
+                            {item.name} ({item.member_id})
+                        </option>
+                    ))}
+                </select>
 
-            <section className="loans-section">
-                <h2>Active Loans</h2>
-
-                {loans.active.length === 0 ? (
-                    <p className="empty-loans">You have no active loans.</p>
+                {loadingMember ? (
+                    <p>Loading member details...</p>
+                ) : !member ? (
+                    <p>Unable to load this member's details.</p>
                 ) : (
-                    <div className="loans-list">
-                        {loans.active.map((loan) => (
-                            <article className="loan-card" key={loan.loan_id}>
-                                <h3>{loan.title}</h3>
-                                <p><strong>Loan ID:</strong> {loan.loan_id}</p>
-                                <p><strong>Due date:</strong> {loan.due_date}</p>
+                    <>
+                        <h2>{member.member}</h2>
 
-                                {loan.days_overdue > 0 ? (
-                                    <p className="overdue-text">
-                                        {loan.days_overdue} days overdue
-                                    </p>
-                                ) : (
-                                    <p className="on-time-text">Not overdue</p>
-                                )}
-                            </article>
-                        ))}
-                    </div>
+                        <div className="member-info">
+                            <p>
+                                <strong>Membership:</strong>{' '}
+                                {member.membership_type}
+                            </p>
+
+                            <p>
+                                <strong>Maximum items:</strong>{' '}
+                                {member.max_items}
+                            </p>
+
+                            <p>
+                                <strong>Unpaid fines:</strong>{' '}
+                                ₹{member.unpaid_fines}
+                            </p>
+                        </div>
+
+                        <section className="loans-section">
+                            <h2>Active Loans</h2>
+
+                            {member.active.length === 0 ? (
+                                <p className="empty-loans">
+                                    You have no active loans.
+                                </p>
+                            ) : (
+                                <div className="loans-list">
+                                    {member.active.map((loan) => (
+                                        <article
+                                            className="loan-card"
+                                            key={loan.loan_id}
+                                        >
+                                            <h3>{loan.title}</h3>
+
+                                            <p>
+                                                <strong>Loan ID:</strong>{' '}
+                                                {loan.loan_id}
+                                            </p>
+
+                                            <p>
+                                                <strong>Due date:</strong>{' '}
+                                                {loan.due_date}
+                                            </p>
+
+                                            {loan.days_overdue > 0 ? (
+                                                <p className="overdue-text">
+                                                    {loan.days_overdue} days overdue
+                                                </p>
+                                            ) : (
+                                                <p className="on-time-text">
+                                                    Not overdue
+                                                </p>
+                                            )}
+                                        </article>
+                                    ))}
+                                </div>
+                            )}
+                        </section>
+                    </>
                 )}
             </section>
         </main>
