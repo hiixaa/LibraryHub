@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --walnut: #2E2522;
+  --oxblood: #5A302C;
+  --olive: #74613F;
+  --aged-paper: #B99A70;
+  --parchment: #E5D8C2;
+
+  --background: #E5D8C2;
+  --surface: #F0E7D8;
+  --text: #2E2522;
+  --muted: #74613F;
+  --border: #B99A70;
+  --primary: #5A302C;
+  --primary-hover: #452320;
+
+  --heading-font: 'Cormorant Garamond', Georgia, serif;
+  --body-font: 'DM Sans', sans-serif;
+
+  font-family: var(--body-font);
+  color: var(--text);
+  background: var(--background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: var(--body-font);
+  background: var(--background);
+  color: var(--text);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--aged-paper);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--heading-font);
+  color: var(--walnut);
+  line-height: 1.15;
+}
+
+p {
+  line-height: 1.6;
+}
+
+a {
+  color: var(--oxblood);
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+::selection {
+  background: var(--oxblood);
+  color: var(--parchment);
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+}

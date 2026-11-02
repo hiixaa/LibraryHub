@@ -1,8 +1,9 @@
 # Virtual environment
 .venv/
 
-# Python cache files
+# Python cache
 __pycache__/
+**/__pycache__/
 *.py[cod]
 
 # Pytest cache
@@ -10,3 +11,12 @@ __pycache__/
 
 # Environment variables
 .env
+web/.env
+
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+* copy.py
